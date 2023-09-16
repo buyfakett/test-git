@@ -25,4 +25,4 @@ jobs:
         run: |
           cd test1
           pip install mkdocs-material
-          mkdocs gh-deploy --force
+          mkdocs gh-deploy
