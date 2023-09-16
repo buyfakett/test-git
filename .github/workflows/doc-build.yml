@@ -3,8 +3,7 @@ name: Doc Build
 on:
   push:
     branch:
-      - master 
-      - main
+      - master
 
 permissions:
   contents: write
