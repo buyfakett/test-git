@@ -29,13 +29,10 @@ jobs:
 
       - name: Build and publish
         run: |
-            cd ./doc/source 
-            mkdocs build
-            cd ../../
-            mkdir ../doc/
-            cp -R ./doc/sourcesite/* ../doc/
-            git checkout gh-pages
-            cp -R ../doc/* .
-            git add .
-            git commit -m 'test'
-            git push
+            cd ./doc/source && mkdocs build && cd ../
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          branch: doc # The branch the action should deploy to.
+          folder: doc/source/site # The folder the action should deploy.
