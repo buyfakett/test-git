@@ -3,7 +3,7 @@ name: Doc Build
 on:
   push:
     branch:
-      - master
+      - master 
       - main
 
 permissions:
@@ -11,7 +11,9 @@ permissions:
 
 jobs:
   deploy:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,8 +23,19 @@ jobs:
         with:
           python-version: '3.7'
 
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material
+
       - name: Build and publish
         run: |
-          cd test1
-          pip install mkdocs-material
-          mkdocs gh-deploy
+            cd ./doc/source 
+            mkdocs build
+            cd ../../
+            mkdir ../doc/
+            cp -R ./doc/sourcesite/* ../doc/
+            git checkout gh-pages
+            cp -R ../doc/* .
+            git add .
+            git commit -m 'test'
+            git push
