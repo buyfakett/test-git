@@ -24,6 +24,5 @@ jobs:
       - name: Build and publish
         run: |
           cd test1
-          ls -al
           pip install mkdocs-material
           mkdocs gh-deploy --force
