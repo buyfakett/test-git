@@ -1,9 +1,5 @@
 name: Doc Build
-on:
-  workflow_dispatch:
-
-permissions:
-  contents: write
+on: [push]
 
 jobs:
   deploy:
