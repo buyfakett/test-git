@@ -14,27 +14,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
+
+      - name: Log into registry
         uses: docker/login-action@v2
         with:
-            registry: ${{ env.REGISTRY }}
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Extract Docker metadata
+
+      - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-            images: ${{ env.IMAGE_NAME }}
-            tags: |
-              # set latest tag for default branch
-              type=raw,value=latest,enable={{is_default_branch}}
-              # tag event
-              type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+          images: buyfakett/rsspush
+          tags: latest
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
