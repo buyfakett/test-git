@@ -1,0 +1,46 @@
+version: "3"
+
+networks:
+  rsspush:
+    external: false
+
+services:
+  server:
+    image: buyfakett/rsspush
+    container_name: rsspush
+    restart: always
+    networks:
+      - rsspush
+    volumes:
+      - ./config/:/app/config/
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rsshub
+
+  db:
+    image: postgres:14.2
+    restart: always
+    container_name: rsspush-db
+    environment:
+      - POSTGRES_USER=rsspush
+      - POSTGRES_PASSWORD=rsspush
+      - POSTGRES_DB=rsspush
+    networks:
+      - rsspush
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  rsshub:
+    image: diygod/rsshub
+    container_name: rsspush-rsshub
+    restart: always
+    ports:
+      - '1200:1200'
+    networks:
+      - rsspush
