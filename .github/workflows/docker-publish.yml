@@ -6,9 +6,6 @@ on:
     tags:
       - v*
 
-  # Run tests for any PRs.
-  pull_request:
-
 jobs:
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -26,21 +23,21 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
     # Extract metadata (tags, labels) for Docker
     # https://github.com/docker/metadata-action
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v4
-      with:
-          images: ${{ env.IMAGE_NAME }}
-          tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
-            # tag event
-            type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
-   # 推送
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v3
-      with:
-        context: .
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+            images: ${{ env.IMAGE_NAME }}
+            tags: |
+              # set latest tag for default branch
+              type=raw,value=latest,enable={{is_default_branch}}
+              # tag event
+              type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+     # 推送
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
