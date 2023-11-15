@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: jenkins
         run: |
-          curl -k -u ${{ secrets.jenkins_user }}:${{ secrets.jenkins_passwd }} https://jenkins.nmg.buyfakett.top/job/test/build?token=${{ secrets.token }}
+          curl -k -u ${{ env.jenkins_user }}:${{ env.jenkins_passwd }} https://jenkins.nmg.buyfakett.top/job/test/build?token=${{ env.token }}
