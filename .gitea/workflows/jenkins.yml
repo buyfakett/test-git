@@ -1,0 +1,15 @@
+name: jenkins
+
+on:
+  push:
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: jenkins
+        run: |
+          curl -k -u ${{ secrets.jenkins_user }}:${{ secrets.jenkins_passwd }} https://jenkins.nmg.buyfakett.top/job/test/build?token=${{ secrets.token }}
